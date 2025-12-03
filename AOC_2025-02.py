@@ -60,6 +60,7 @@ def run(input_file, part):
     return sum
 
 
+# An idea from Reddit
 def regex(input_file, part):
     with open(input_file) as f:
         id_file = f.read().strip()
@@ -85,17 +86,58 @@ def regex(input_file, part):
     return sum
 
 
+# From the overlord
+def overlord(input_file, part):
+    with open(input_file) as f:
+        id_file = f.read().strip()
+
+    id_list = [id.split("-") for id in id_file.split(",")]
+
+    def is_repeated(id, part):
+        s = str(id)
+        l = len(s)
+
+        for seg_len in range(1, l // 2 + 1):
+            if l % seg_len != 0:
+                continue
+            seg = s[:seg_len]
+            if seg * (l // seg_len) == s:
+                if part == 1 and l // seg_len == 2:
+                    return True
+                if part == 2:
+                    return True
+        return False
+
+    sum = 0
+
+    for full_id in id_list:
+        for inc in range(int(full_id[0]), int(full_id[1]) + 1):
+            if is_repeated(inc, part):
+                sum += int(inc)
+
+    return sum
+
+
 for part in [1, 2]:
-    print(f"Part {part}:")
+    print("------")
+    print(f"Part {part}")
+    print("------")
     start = perf_counter()
-    print("Test: ", run(test_file, part))
+    print("  Test: ", run(test_file, part))
     end = perf_counter()
-    print("Time: " + str(end - start))
+    print("  Time: ", end - start)
+    print("  ------")
     start = perf_counter()
-    print("Actual: ", run(input_file, part))
+    print("  Actual: ", run(input_file, part))
     end = perf_counter()
-    print("Time: " + str(end - start))
+    print("  Time: ", end - start)
+    print("  ------")
     start = perf_counter()
-    print("Regex: ", regex(input_file, part))
+    print("  Regex: ", regex(input_file, part))
     end = perf_counter()
-    print("Time: " + str(end - start))
+    print("  Time: ", end - start)
+    print("  ------")
+    start = perf_counter()
+    print("  Overlord: ", overlord(input_file, part))
+    end = perf_counter()
+    print("  Time: ", end - start)
