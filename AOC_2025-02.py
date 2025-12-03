@@ -1,4 +1,6 @@
 from pathlib import Path
+from time import perf_counter
+import re
 
 input_file = Path(__file__).with_suffix(".input")
 test_file = Path(__file__).with_suffix(".test")
@@ -58,7 +60,42 @@ def run(input_file, part):
     return sum
 
 
+def regex(input_file, part):
+    with open(input_file) as f:
+        id_file = f.read().strip()
+
+    id_list = [id.split("-") for id in id_file.split(",")]
+
+    def is_repeated(id, part):
+        id = str(id)
+        if part == 1:
+            if re.match(r"^(.+?)\1$", id):
+                return True
+        if part == 2:
+            if re.match(r"^(.+?)\1+$", id):
+                return True
+
+    sum = 0
+
+    for full_id in id_list:
+        for inc in range(int(full_id[0]), int(full_id[1]) + 1):
+            if is_repeated(inc, part):
+                sum += int(inc)
+
+    return sum
+
+
 for part in [1, 2]:
     print(f"Part {part}:")
+    start = perf_counter()
     print("Test: ", run(test_file, part))
+    end = perf_counter()
+    print("Time: " + str(end - start))
+    start = perf_counter()
     print("Actual: ", run(input_file, part))
+    end = perf_counter()
+    print("Time: " + str(end - start))
+    start = perf_counter()
+    print("Regex: ", regex(input_file, part))
+    end = perf_counter()
+    print("Time: " + str(end - start))
