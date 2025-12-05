@@ -1,5 +1,6 @@
+.DS_Store
+*.draft
 *.input
 *.test
-test.py
 results
-*.draft
+test.py
