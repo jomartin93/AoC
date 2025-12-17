@@ -1,6 +1,8 @@
 .DS_Store
+.venv/
 *.draft
 *.input
+*.ipynb
 *.test
 results
 test.py
